@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ffl_draw/core/storage/storage.dart';
 import 'package:ffl_draw/models/user.dart';
 import 'package:ffl_draw/core/environment/environment.dart';
+import 'package:ffl_draw/pages/home/home.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ class _LoginState extends State<Login> {
       if (_user != null) {
         print('if: ${_user.nome}');
         await storage.setUser(_user);
-//        Navigator.push(context, route)
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       else {
         print('else: ${_user}');
