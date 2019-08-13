@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ffl_draw/core/components/drawer.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Home'),
       ),
+      drawer: NavDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
