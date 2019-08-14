@@ -1,9 +1,29 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
-// models
 import 'package:ffl_draw/models/user.dart';
 
 class Storage {
+
+  // Dados Login
+  Future setLogin(usuario, senha, remember) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('login-remember', remember);
+
+    if(remember) {
+      await prefs.setString('login-usuario', usuario);
+      await prefs.setString('login-senha', senha);
+    }
+  }
+
+  Future getLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return {
+      'remember': await prefs.getBool('login-remember'),
+      'usuario': await prefs.getString('login-usuario'),
+      'senha': await prefs.getString('login-senha')
+    };
+
+  }
 
   // User
   Future<User> getUser() async {
@@ -12,11 +32,7 @@ class Storage {
     final usuario = await prefs.getString('usuario-usuario');
     final senha = await prefs.getString('usuario-senha');
 
-    return User(
-      nome,
-      usuario,
-      senha
-    );
+    return User(nome: nome, usuario: usuario, senha: senha);
   }
 
   Future setUser(User user) async {
@@ -32,7 +48,5 @@ class Storage {
     await prefs.remove('usuario-usuario');
     await prefs.remove('usuario-senha');
   }
-
-  // Player
 
 }

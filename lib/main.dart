@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
         title: 'FFL DRAW',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          backgroundColor: Colors.purple,
         ),
       home: Auth()
     );

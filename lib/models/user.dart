@@ -4,9 +4,9 @@ class User {
   String usuario;
   String senha;
 
-  User(
+  User({
     this.nome,
     this.usuario,
     this.senha
-  );
+  });
 }

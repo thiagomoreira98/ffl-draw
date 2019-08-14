@@ -18,6 +18,8 @@ class _LoginState extends State<Login> {
   final senhaController = TextEditingController();
   final storage = Storage();
   bool exibirSenha = false;
+  bool remember = true;
+  bool loading = true;
 
   void showPassword() {
     setState(() {
@@ -33,15 +35,14 @@ class _LoginState extends State<Login> {
       User _user = this.getUser(usuario, senha);
 
       if (_user != null) {
-        print('if: ${_user.nome}');
+        await storage.setLogin(usuario, senha, remember);
         await storage.setUser(_user);
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       else {
-        print('else: ${_user}');
         this._scaffoldKey.currentState.showSnackBar(
             SnackBar(
-              content: new Text('Usuario ou Senha inválido!'),
+              content: Text('Usuario ou Senha inválido!'),
               action: SnackBarAction(
                 label: 'Fechar',
                 onPressed: () {},
@@ -63,76 +64,121 @@ class _LoginState extends State<Login> {
     return _user;
   }
 
+  Future getLogin() async {
+    var login = await storage.getLogin();
+    if(login['remember'] == true)
+      remember = true;
+    else
+      remember = false;
+
+    if(remember) {
+      this.usuarioController.text = login['usuario'];
+      this.senhaController.text = login['senha'];
+    }
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: this._scaffoldKey,
-        body: Container(
-            padding: EdgeInsets.all(8.0),
-            child: Center(
-              child: Card(
-                child: Form(
-                  key: this._form,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-                        child: TextFormField(
-                          controller: usuarioController,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: 'Usuario',
-                            border: OutlineInputBorder()
-                          ),
-                          validator: (value) {
-                            if(value.isEmpty) {
-                              return 'Informe um usuário';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-                        child: TextFormField(
-                          controller: senhaController,
-                          keyboardType: TextInputType.text,
-                          obscureText: this.exibirSenha ? false : true,
-                          decoration: InputDecoration(
-                            labelText: 'Senha',
-                            border: OutlineInputBorder(),
-                            suffixIcon: IconButton(
-                                onPressed: () => showPassword(),
-                                icon: Icon(this.exibirSenha ? Icons.visibility_off : Icons.visibility)
-                            )
-                          ),
-                          validator: (value) {
-                            if(value.isEmpty) {
-                              return 'Informe uma senha';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Container(
-                          width: 200,
-                          height: 40,
-                          margin: EdgeInsets.only(top: 16, bottom: 16),
-                          child: RaisedButton(
-                            child: Text('ENTRAR',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
+    if (loading) {
+      return Center(
+          child: CircularProgressIndicator()
+      );
+    }
+    else {
+      return Scaffold(
+          key: this._scaffoldKey,
+          body: Container(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: Card(
+                  child: Form(
+                      key: this._form,
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, right: 16, top: 16),
+                              child: TextFormField(
+                                controller: usuarioController,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                    labelText: 'Usuario',
+                                    border: OutlineInputBorder()
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Informe um usuário';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                            onPressed: () => onSubmit(),
-                            color: Colors.blue,
-                          )
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, right: 16, top: 16),
+                              child: TextFormField(
+                                controller: senhaController,
+                                keyboardType: TextInputType.text,
+                                obscureText: this.exibirSenha ? false : true,
+                                decoration: InputDecoration(
+                                    labelText: 'Senha',
+                                    border: OutlineInputBorder(),
+                                    suffixIcon: IconButton(
+                                        onPressed: () => showPassword(),
+                                        icon: Icon(this.exibirSenha ? Icons
+                                            .visibility_off : Icons.visibility)
+                                    )
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Informe uma senha';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            CheckboxListTile(
+                              title: Text('Lembrar senha'),
+                              value: remember,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  remember = value;
+                                });
+                              },
+                            ),
+                            Container(
+                                width: 200,
+                                height: 40,
+                                margin: EdgeInsets.only(top: 16, bottom: 16),
+                                child: RaisedButton(
+                                  child: Text('ENTRAR',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                  onPressed: () => onSubmit(),
+                                  color: Colors.blue,
+                                )
+                            ),
+
+                          ]
                       )
-                    ]
-                  )
+                  ),
                 ),
-              ),
-            )
-        )
-    );
+              )
+          )
+      );
+    }
   }
 }

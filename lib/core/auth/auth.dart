@@ -4,6 +4,7 @@ import 'package:ffl_draw/models/user.dart';
 import 'package:ffl_draw/pages/login/login.dart';
 import 'package:ffl_draw/pages/home/home.dart';
 
+
 class Auth extends StatefulWidget {
   @override
   _AuthState createState() => _AuthState();
@@ -11,12 +12,11 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
 
+  Storage storage = Storage();
   bool isLogged = false;
   bool loading = true;
 
   Future userIsLogged() async {
-    Storage storage = Storage();
-//    await storage.removeUser();
     User _user = await storage.getUser();
 
     if(_user.usuario != null)
