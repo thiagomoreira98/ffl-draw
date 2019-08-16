@@ -11,7 +11,14 @@ class Storage {
 
   Future<bool> getIsDrawed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isDrawed');
+    bool _isDrawed = await prefs.getBool('isDrawed');
+
+    if(_isDrawed != null) {
+      return _isDrawed;
+    }
+    else {
+      return false;
+    }
   }
 
   // Dados Login
