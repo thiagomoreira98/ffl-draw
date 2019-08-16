@@ -17,7 +17,34 @@ class Sqlite {
     var databasePath = await getDatabasesPath();
     return openDatabase(join(databasePath, 'ffl-draw.db'),
       onCreate: (db, version) {
-        return db.execute("CREATE TABLE player(id INTEGER PRIMARY KEY, ativo BOOLEAN, nome VARCHAR(150), idpsn VARCHAR(50))");
+        db.execute(
+          "CREATE TABLE time("
+            "id INTEGER PRIMARY KEY,"
+            "ativo BOOLEAN NOT NULL,"
+            "nome VARCHAR(50) NOT NULL"
+          ")"
+        );
+
+        db.execute(
+          "CREATE TABLE selecao("
+            "id INTEGER PRIMARY KEY,"
+            "ativo BOOLEAN NOT NULL,"
+            "nome VARCHAR(50) NOT NULL"
+          ")"
+        );
+
+        db.execute(
+          "CREATE TABLE player("
+            "id INTEGER PRIMARY KEY,"
+            "ativo BOOLEAN NOT NULL,"
+            "nome VARCHAR(100) NOT NULL,"
+            "idpsn VARCHAR(50),"
+            "idtime INTEGER,"
+            "idselecao INTEGER,"
+            "CONSTRAINT fk_player_time FOREIGN KEY(idtime) references time(id),"
+            "CONSTRAINT fk_player_selecao FOREIGN KEY(idselecao) references selecao(id)"
+          ")"
+        );
       },
       version: 1
     );

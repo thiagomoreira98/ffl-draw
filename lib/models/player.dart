@@ -4,12 +4,16 @@ class Player {
   bool ativo;
   String nome;
   String idPsn;
+  int idTime;
+  int idSelecao;
 
   Player({
     this.id,
     this.ativo,
     this.nome,
-    this.idPsn
+    this.idPsn,
+    this.idTime,
+    this.idSelecao
   });
 
   Map<String, dynamic> toMap() {
@@ -18,6 +22,8 @@ class Player {
       'ativo': ativo,
       'nome': nome,
       'idpsn': idPsn,
+      'idTime': idTime,
+      'idSelecao': idSelecao
     };
   }
 }

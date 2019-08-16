@@ -6,16 +6,25 @@ class PlayerRepository {
 
   final Sqlite sqlite = Sqlite();
 
-  Future<List<Player>> getPlayers() async {
+  Future<List<Player>> getPlayers([bool ativo]) async {
     final Database db = await sqlite.database;
+    List<Map<String, dynamic>> maps = [];
 
-    final List<Map<String, dynamic>> maps = await db.query('player');
+    if(ativo != null) {
+      maps = await db.query("player", where: "ativo = 1", orderBy: "nome");
+    }
+    else {
+      maps = await db.query("player", orderBy: "nome");
+    }
+
     return List.generate(maps.length, (i) {
       return Player(
         id: maps[i]['id'],
         ativo: maps[i]['ativo'] == 1 ? true : false,
         nome: maps[i]['nome'],
         idPsn: maps[i]['idpsn'],
+        idTime: maps[0]['idtime'],
+        idSelecao: maps[0]['idselecao']
       );
     });
   }
@@ -32,6 +41,8 @@ class PlayerRepository {
         ativo: maps[0]['ativo'] == 1 ? true : false,
         nome: maps[0]['nome'],
         idPsn: maps[0]['idpsn'],
+        idTime: maps[0]['idtime'],
+        idSelecao: maps[0]['idselecao']
       );
     }
 

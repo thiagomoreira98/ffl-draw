@@ -3,6 +3,17 @@ import 'package:ffl_draw/models/user.dart';
 
 class Storage {
 
+  // isDrawed
+  Future<void> setIsDrawed(bool isDrawed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDrawed', isDrawed);
+  }
+
+  Future<bool> getIsDrawed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isDrawed');
+  }
+
   // Dados Login
   Future setLogin(usuario, senha, remember) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

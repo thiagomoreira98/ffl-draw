@@ -79,6 +79,7 @@ class _PlayerListState extends State<PlayerList> {
                 child: Container(
                   color: Colors.white,
                   child: ListTile(
+                    onTap: () => editPlayer(item.id),
                     leading: Container(
                       padding: EdgeInsets.only(top: 8),
                       child: CircleAvatar(
@@ -94,12 +95,6 @@ class _PlayerListState extends State<PlayerList> {
                   ),
                 ),
                 secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Editar',
-                    color: Colors.grey,
-                    icon: Icons.edit,
-                    onTap: () => editPlayer(item.id),
-                  ),
                   IconSlideAction(
                     caption: 'Remover',
                     color: Colors.red,

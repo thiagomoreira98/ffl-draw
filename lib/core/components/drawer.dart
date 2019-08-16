@@ -3,6 +3,8 @@ import 'package:ffl_draw/core/storage/storage.dart';
 import 'package:ffl_draw/pages/home/home.dart';
 import 'package:ffl_draw/pages/login/login.dart';
 import 'package:ffl_draw/pages/player/list.dart';
+import 'package:ffl_draw/pages/time/list.dart';
+import 'package:ffl_draw/pages/selecao/list.dart';
 
 class NavDrawer extends StatelessWidget {
 
@@ -46,7 +48,7 @@ class NavDrawer extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Text('FFL Draw'),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -61,6 +63,18 @@ class NavDrawer extends StatelessWidget {
               title: Text('Player'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerList()));
+              },
+            ),
+            ListTile(
+              title: Text('Time'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeList()));
+              },
+            ),
+            ListTile(
+              title: Text('Seleção'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SelecaoList()));
               },
             ),
             ListTile(
